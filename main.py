@@ -1,5 +1,30 @@
-# source https://github.com/alfaarghya/alfa-leetcode-api
+import time
+import board
+import displayio
+import terminalio
+from adafruit_display_text import label
+from adafruit_st7789 import ST7789
 import requests
+
+# SPI init
+spi = board.SPI()
+tft_cs = board.D9
+tft_dc = board.D10
+reset_pin = board.D11
+
+DISPLAY_WIDTH = 240
+DISPLAY_HEIGHT = 320
+display_bus = displayio.FourWire(spi, command=tft_dc, chip_select=tft_cs, reset=reset_pin)
+display = ST7789(display_bus, width=DISPLAY_WIDTH, height=DISPLAY_HEIGHT, rotation=90)
+
+splash = displayio.Group()
+display.show(splash)
+
+
+def update_display(content):
+    splash.pop()
+    # todo: display contents
+
 
 def get_leetcode_stats(username):
     api_url = f"https://leetcode-stats-api.herokuapp.com/{username}"
@@ -19,6 +44,7 @@ def get_leetcode_stats(username):
             raise ValueError("User Not Found！")
     else:
         raise Exception(f"Request Failed with Status Code：{response.status_code}")
+
 
 username = "Jiang17832"
 try:
